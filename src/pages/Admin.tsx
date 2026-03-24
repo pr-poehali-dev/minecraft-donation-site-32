@@ -158,6 +158,25 @@ const AdminPage = () => {
           ))}
         </div>
 
+        {/* Telegram notifications */}
+        <div className="mc-card p-6 box-neon-purple mb-8">
+          <h2 className="font-mc text-mc-purple text-sm tracking-widest mb-1 flex items-center gap-2" style={{ color: "#9b59b6" }}>
+            <Icon name="Bell" size={16} />
+            Telegram-уведомления о покупках
+          </h2>
+          <p className="text-mc-green/40 font-mc text-xs tracking-wider mb-3">
+            При каждой покупке тебе придёт сообщение в Telegram на @RIKO_MASTER_OFFICIAL
+          </p>
+          <div className="space-y-2 p-3 bg-mc-bg/60 border border-mc-border">
+            <p className="font-mc text-mc-gold/80 text-xs tracking-wider">Для активации уведомлений:</p>
+            <p className="font-mc text-mc-green/60 text-xs">1. Напиши боту <span className="text-white">@BotFather</span> → /newbot → получи токен</p>
+            <p className="font-mc text-mc-green/60 text-xs">2. Вставь токен в поле <span className="text-white">TELEGRAM_BOT_TOKEN</span> (Ядро → Секреты)</p>
+            <p className="font-mc text-mc-green/60 text-xs">3. Напиши боту <span className="text-white">@userinfobot</span> → получи свой ID</p>
+            <p className="font-mc text-mc-green/60 text-xs">4. Вставь ID в поле <span className="text-white">TELEGRAM_CHAT_ID</span> (Ядро → Секреты)</p>
+            <p className="font-mc text-mc-green/60 text-xs">5. Напиши своему боту любое сообщение чтобы активировать его</p>
+          </div>
+        </div>
+
         {/* YooMoney wallet */}
         <div className="mc-card p-6 box-neon-green mb-8">
           <h2 className="font-mc text-mc-green text-sm tracking-widest mb-1 flex items-center gap-2">

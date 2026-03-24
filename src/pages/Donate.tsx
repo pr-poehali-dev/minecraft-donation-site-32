@@ -1,8 +1,21 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Icon from "@/components/ui/icon";
+import func2url from "../../backend/func2url.json";
 
 const YOOMONEY_WALLET = "4100119499721423";
+
+const sendNotify = async (nick: string, rank: string, price: number) => {
+  try {
+    await fetch(func2url.notify, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nick, rank, price }),
+    });
+  } catch {
+    // уведомление не критично
+  }
+};
 
 const RANKS = [
   {
@@ -133,6 +146,7 @@ const DonatePage = () => {
       date: new Date().toISOString(),
     });
     localStorage.setItem("donate_history", JSON.stringify(history.slice(0, 50)));
+    sendNotify(nick.trim(), name, price);
     window.open(buildYooMoneyUrl(price, name, nick.trim()), "_blank");
   };
 
