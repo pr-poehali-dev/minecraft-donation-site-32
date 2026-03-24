@@ -44,10 +44,7 @@ const HomePage = () => {
           <p className="text-mc-green/60 text-lg md:text-xl mb-2 font-mc tracking-widest">
             Minecraft сервер нового поколения
           </p>
-          <div className="flex items-center justify-center gap-2 mb-10 text-mc-green/40 text-sm font-mc">
-            <span className="w-2 h-2 bg-mc-green rounded-full animate-pulse inline-block" />
-            IP: play.multiworld.ru
-          </div>
+          <div className="mb-10" />
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

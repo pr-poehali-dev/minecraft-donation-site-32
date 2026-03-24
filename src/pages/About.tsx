@@ -3,9 +3,7 @@ import Icon from "@/components/ui/icon";
 
 const MODES = [
   { icon: "Swords", name: "Survival", desc: "Классическое выживание с экономикой и кланами" },
-  { icon: "Building2", name: "Creative", desc: "Безлимитный творческий режим для строителей" },
   { icon: "Skull", name: "Hardcore", desc: "Один шанс на выживание — настоящий вызов" },
-  { icon: "Zap", name: "SkyWars", desc: "Мини-игры на островах в небе" },
 ];
 
 const RULES = [
@@ -29,13 +27,6 @@ const AboutPage = () => {
           <p className="text-mc-green/50 font-mc text-sm tracking-widest max-w-xl mx-auto">
             multiWORLD — Minecraft сервер с богатой историей и активным комьюнити
           </p>
-        </div>
-
-        {/* IP Block */}
-        <div className="mc-card p-6 mb-8 box-neon-green text-center animate-fade-in-up">
-          <div className="font-mc text-mc-green/50 text-xs tracking-widest mb-2">АДРЕС СЕРВЕРА</div>
-          <div className="font-mc text-2xl text-mc-green neon-green tracking-widest">play.multiworld.ru</div>
-          <div className="font-mc text-mc-green/40 text-xs mt-1">Версия: 1.20.x • Java Edition</div>
         </div>
 
         {/* Modes */}
@@ -73,11 +64,10 @@ const AboutPage = () => {
         <h2 className="font-mc text-xl text-mc-gold neon-gold mb-5 tracking-widest">
           Контакты
         </h2>
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 gap-4">
           {[
             { icon: "MessageCircle", label: "Discord", value: "discord.gg/multiworld" },
-            { icon: "Send", label: "Telegram", value: "@multiworld_mc" },
-            { icon: "Globe", label: "VK", value: "vk.com/multiworld" },
+            { icon: "Send", label: "Telegram", value: "@multiworldRU" },
           ].map((c) => (
             <div key={c.label} className="mc-card p-4 text-center box-neon-green">
               <Icon name={c.icon} fallback="Globe" size={20} className="text-mc-gold mx-auto mb-2" />
