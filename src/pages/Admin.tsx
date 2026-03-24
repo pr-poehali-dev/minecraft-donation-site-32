@@ -19,6 +19,8 @@ const RANK_COLORS: Record<string, string> = {
   Helper: "#9b59b6",
   Moder: "#FFD700",
   "D.Admin": "#e74c3c",
+  "Разбан": "#2ECC40",
+  "Размут": "#48d1e0",
 };
 
 const AdminPage = () => {
@@ -26,10 +28,10 @@ const AdminPage = () => {
   const [code, setCode] = useState("");
   const [error, setError] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [paymentLink, setPaymentLink] = useState(
-    localStorage.getItem("admin_payment_link") || "https://www.tinkoff.ru/rm/"
+  const [wallet, setWallet] = useState(
+    localStorage.getItem("admin_yoomoney_wallet") || "4100119499721423"
   );
-  const [paymentSaved, setPaymentSaved] = useState(false);
+  const [walletSaved, setWalletSaved] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [blocked, setBlocked] = useState(false);
 
@@ -54,10 +56,10 @@ const AdminPage = () => {
     }
   };
 
-  const handleSavePayment = () => {
-    localStorage.setItem("admin_payment_link", paymentLink);
-    setPaymentSaved(true);
-    setTimeout(() => setPaymentSaved(false), 2000);
+  const handleSaveWallet = () => {
+    localStorage.setItem("admin_yoomoney_wallet", wallet);
+    setWalletSaved(true);
+    setTimeout(() => setWalletSaved(false), 2000);
   };
 
   const handleClearHistory = () => {
@@ -129,9 +131,7 @@ const AdminPage = () => {
 
         <div className="flex items-center justify-between mb-8 animate-fade-in-up">
           <div>
-            <h1 className="font-mc text-3xl text-mc-gold neon-gold tracking-widest">
-              Admin Panel
-            </h1>
+            <h1 className="font-mc text-3xl text-mc-gold neon-gold tracking-widest">Admin Panel</h1>
             <p className="font-mc text-mc-green/40 text-xs tracking-widest mt-1">multiWORLD</p>
           </div>
           <button
@@ -158,33 +158,39 @@ const AdminPage = () => {
           ))}
         </div>
 
-        {/* Payment link settings */}
+        {/* YooMoney wallet */}
         <div className="mc-card p-6 box-neon-green mb-8">
-          <h2 className="font-mc text-mc-green text-sm tracking-widest mb-4 flex items-center gap-2">
-            <Icon name="CreditCard" size={16} />
-            Ссылка для приёма оплаты
+          <h2 className="font-mc text-mc-green text-sm tracking-widest mb-1 flex items-center gap-2">
+            <Icon name="Wallet" size={16} />
+            Кошелёк ЮMoney для приёма платежей
           </h2>
-          <p className="text-mc-green/40 font-mc text-xs tracking-wider mb-3">
-            Вставьте ссылку вашей карты/кошелька (Тинькофф, ЮMoney, СБП и т.д.). При покупке донат игрок будет перенаправлен по этой ссылке.
+          <p className="text-mc-green/40 font-mc text-xs tracking-wider mb-4">
+            Все платежи с магазина приходят на этот кошелёк ЮMoney. Привяжите к нему карту Сбер в настройках ЮMoney — деньги будут автоматически переводиться на карту.
           </p>
           <div className="flex gap-3">
-            <input
-              type="text"
-              value={paymentLink}
-              onChange={(e) => setPaymentLink(e.target.value)}
-              placeholder="https://www.tinkoff.ru/rm/..."
-              className="flex-1 bg-mc-bg border border-mc-border text-mc-green font-mc py-2.5 px-3 text-xs tracking-wider outline-none focus:border-mc-green transition-colors"
-            />
+            <div className="relative flex-1">
+              <Icon name="CreditCard" size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-mc-green/40" />
+              <input
+                type="text"
+                value={wallet}
+                onChange={(e) => setWallet(e.target.value.replace(/\D/g, ""))}
+                placeholder="4100..."
+                maxLength={20}
+                className="w-full bg-mc-bg border border-mc-border text-mc-green font-mc py-2.5 pl-8 pr-3 text-sm tracking-widest outline-none focus:border-mc-green transition-colors"
+              />
+            </div>
             <button
-              onClick={handleSavePayment}
-              className={`mc-btn px-5 py-2.5 font-mc text-xs tracking-widest ${paymentSaved ? "bg-mc-green text-mc-bg border-mc-green" : "border-mc-green text-mc-green hover:bg-mc-green/10"}`}
+              onClick={handleSaveWallet}
+              className={`mc-btn px-5 py-2.5 font-mc text-xs tracking-widest transition-colors ${walletSaved ? "bg-mc-green text-mc-bg border-mc-green" : "border-mc-green text-mc-green hover:bg-mc-green/10"}`}
             >
-              {paymentSaved ? "✓ Сохранено" : "Сохранить"}
+              {walletSaved ? "✓ Сохранено" : "Сохранить"}
             </button>
           </div>
-          <p className="text-mc-green/20 font-mc text-xs mt-2 tracking-wider">
-            ⚠ Ссылка сохраняется локально в браузере
-          </p>
+          <div className="mt-3 p-3 bg-mc-bg/60 border border-mc-border">
+            <p className="font-mc text-mc-gold/70 text-xs tracking-wider">
+              Как вывести деньги на Сбер: yoomoney.ru → Вывод средств → Карта банка
+            </p>
+          </div>
         </div>
 
         {/* History */}

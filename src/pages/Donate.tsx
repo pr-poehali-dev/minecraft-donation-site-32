@@ -2,6 +2,8 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Icon from "@/components/ui/icon";
 
+const YOOMONEY_WALLET = "4100119499721423";
+
 const RANKS = [
   {
     id: "hero",
@@ -83,32 +85,55 @@ const RANKS = [
   },
 ];
 
-const PAYMENT_URL = "https://www.tinkoff.ru/rm/"; // замените на свою ссылку оплаты
+const SERVICES = [
+  {
+    id: "unban",
+    name: "Разбан",
+    price: 50,
+    color: "#2ECC40",
+    neon: "neon-green",
+    box: "box-neon-green",
+    borderColor: "#2ECC40",
+    icon: "Unlock",
+    desc: "Снятие бана с вашего аккаунта",
+  },
+  {
+    id: "unmute",
+    name: "Размут",
+    price: 30,
+    color: "#48d1e0",
+    neon: "neon-diamond",
+    box: "box-neon-diamond",
+    borderColor: "#48d1e0",
+    icon: "Volume2",
+    desc: "Снятие мута с вашего аккаунта",
+  },
+];
+
+const buildYooMoneyUrl = (amount: number, label: string, nick: string) => {
+  const comment = encodeURIComponent(`${label} для ${nick} | multiWORLD`);
+  return `https://yoomoney.ru/quickpay/confirm?receiver=${YOOMONEY_WALLET}&quickpay-form=donate&targets=${comment}&sum=${amount}&label=${encodeURIComponent(label)}&successURL=${encodeURIComponent(window.location.origin + "/history")}`;
+};
 
 const DonatePage = () => {
   const [nick, setNick] = useState("");
-  const [selected, setSelected] = useState<string | null>(null);
   const [nickError, setNickError] = useState(false);
 
-  const handleBuy = (rankId: string) => {
+  const handleBuy = (name: string, price: number) => {
     if (!nick.trim()) {
       setNickError(true);
       return;
     }
     setNickError(false);
-    const rank = RANKS.find((r) => r.id === rankId);
-    if (!rank) return;
-    // Сохраняем покупку в историю
     const history = JSON.parse(localStorage.getItem("donate_history") || "[]");
     history.unshift({
       nick: nick.trim(),
-      rank: rank.name,
-      price: rank.price,
+      rank: name,
+      price,
       date: new Date().toISOString(),
     });
     localStorage.setItem("donate_history", JSON.stringify(history.slice(0, 50)));
-    // Переход на сайт оплаты
-    window.open(`${PAYMENT_URL}?amount=${rank.price}&description=${rank.name}+для+${nick}`, "_blank");
+    window.open(buildYooMoneyUrl(price, name, nick.trim()), "_blank");
   };
 
   return (
@@ -121,7 +146,7 @@ const DonatePage = () => {
             Донат-магазин
           </h1>
           <p className="text-mc-green/50 font-mc text-sm tracking-widest">
-            Выберите ранг и введите ник для покупки
+            Оплата через ЮMoney — деньги поступают мгновенно
           </p>
         </div>
 
@@ -145,40 +170,33 @@ const DonatePage = () => {
           )}
         </div>
 
-        {/* Ranks grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* Ranks */}
+        <h2 className="font-mc text-lg text-mc-gold neon-gold tracking-widest mb-6">
+          ▸ Донат-ранги
+        </h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-14">
           {RANKS.map((rank, idx) => (
             <div
               key={rank.id}
-              className={`mc-card ${rank.box} relative cursor-pointer transition-all duration-300 hover:scale-[1.02] animate-fade-in-up ${selected === rank.id ? "ring-2 ring-mc-gold" : ""}`}
+              className={`mc-card ${rank.box} relative transition-all duration-300 hover:scale-[1.02] animate-fade-in-up`}
               style={{ animationDelay: `${idx * 0.08}s`, borderColor: rank.borderColor }}
-              onClick={() => setSelected(rank.id === selected ? null : rank.id)}
             >
               {rank.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-mc-red text-white font-mc text-xs px-3 py-0.5 tracking-widest">
                   POPULAR
                 </div>
               )}
-
               <div className="p-5">
                 <div className="flex items-center justify-between mb-3">
                   <Icon name={rank.icon} fallback="Star" size={24} style={{ color: rank.color }} />
-                  <span className="font-mc text-xs tracking-widest" style={{ color: rank.color }}>
-                    #{idx + 1}
-                  </span>
+                  <span className="font-mc text-xs tracking-widest" style={{ color: rank.color }}>#{idx + 1}</span>
                 </div>
-
-                <h3
-                  className={`font-mc text-xl tracking-widest mb-1 ${rank.neon}`}
-                  style={{ color: rank.color }}
-                >
+                <h3 className={`font-mc text-xl tracking-widest mb-1 ${rank.neon}`} style={{ color: rank.color }}>
                   {rank.name}
                 </h3>
-
                 <div className="font-mc text-2xl text-white mb-4">
                   {rank.price} <span className="text-mc-green/60 text-sm">₽</span>
                 </div>
-
                 <ul className="space-y-1 mb-5">
                   {rank.perks.map((p) => (
                     <li key={p} className="text-mc-green/60 text-xs font-mc flex items-start gap-1.5">
@@ -187,15 +205,10 @@ const DonatePage = () => {
                     </li>
                   ))}
                 </ul>
-
                 <button
-                  onClick={(e) => { e.stopPropagation(); handleBuy(rank.id); }}
+                  onClick={() => handleBuy(rank.name, rank.price)}
                   className="mc-btn w-full py-2.5 text-xs font-mc tracking-widest transition-all duration-200"
-                  style={{
-                    backgroundColor: rank.color,
-                    color: "#0a0e14",
-                    borderColor: rank.color,
-                  }}
+                  style={{ backgroundColor: rank.color, color: "#0a0e14", borderColor: rank.color }}
                 >
                   <Icon name="ShoppingCart" size={13} className="inline mr-1.5" />
                   Купить
@@ -205,8 +218,43 @@ const DonatePage = () => {
           ))}
         </div>
 
-        <p className="text-center text-mc-green/30 font-mc text-xs tracking-widest mt-10">
-          После оплаты ранг выдаётся автоматически в течение 5 минут
+        {/* Services */}
+        <h2 className="font-mc text-lg text-mc-gold neon-gold tracking-widest mb-6">
+          ▸ Услуги
+        </h2>
+        <div className="grid sm:grid-cols-2 gap-6 mb-10 max-w-xl">
+          {SERVICES.map((svc, idx) => (
+            <div
+              key={svc.id}
+              className={`mc-card ${svc.box} transition-all duration-300 hover:scale-[1.02] animate-fade-in-up`}
+              style={{ animationDelay: `${idx * 0.08}s`, borderColor: svc.borderColor }}
+            >
+              <div className="p-5">
+                <div className="flex items-center gap-3 mb-3">
+                  <Icon name={svc.icon} fallback="Star" size={24} style={{ color: svc.color }} />
+                  <h3 className={`font-mc text-xl tracking-widest ${svc.neon}`} style={{ color: svc.color }}>
+                    {svc.name}
+                  </h3>
+                </div>
+                <p className="text-mc-green/50 text-xs font-mc mb-3">{svc.desc}</p>
+                <div className="font-mc text-2xl text-white mb-4">
+                  {svc.price} <span className="text-mc-green/60 text-sm">₽</span>
+                </div>
+                <button
+                  onClick={() => handleBuy(svc.name, svc.price)}
+                  className="mc-btn w-full py-2.5 text-xs font-mc tracking-widest transition-all duration-200"
+                  style={{ backgroundColor: svc.color, color: "#0a0e14", borderColor: svc.color }}
+                >
+                  <Icon name="ShoppingCart" size={13} className="inline mr-1.5" />
+                  Купить
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p className="text-center text-mc-green/30 font-mc text-xs tracking-widest mt-4">
+          Оплата через ЮMoney · После оплаты ранг/услуга выдаётся в течение 5 минут
         </p>
       </div>
     </div>
