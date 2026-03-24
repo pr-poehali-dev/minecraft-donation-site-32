@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+		"./1774360467928571209.html"
 	],
 	prefix: "",
 	theme: {
@@ -18,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				mc: ['Oswald', 'sans-serif'],
+				body: ['Rubik', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,6 +66,17 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				mc: {
+					green: '#2ECC40',
+					darkGreen: '#1a7a27',
+					gold: '#FFD700',
+					diamond: '#48d1e0',
+					purple: '#9b59b6',
+					red: '#e74c3c',
+					bg: '#0a0e14',
+					card: '#111823',
+					border: '#1e3a1e',
 				}
 			},
 			borderRadius: {
@@ -70,25 +86,42 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-8px)' }
+				},
+				'fade-in-up': {
+					from: { opacity: '0', transform: 'translateY(30px)' },
+					to: { opacity: '1', transform: 'translateY(0)' }
+				},
+				'flicker': {
+					'0%, 95%, 100%': { opacity: '1' },
+					'96%, 99%': { opacity: '0.7' }
+				},
+				'glow-pulse': {
+					'0%, 100%': { boxShadow: '0 0 8px rgba(46,204,64,0.4)' },
+					'50%': { boxShadow: '0 0 20px rgba(46,204,64,0.8), 0 0 40px rgba(46,204,64,0.4)' }
+				},
+				'blockchain-pulse': {
+					'0%, 100%': { opacity: '0.3' },
+					'50%': { opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'float': 'float 3s ease-in-out infinite',
+				'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
+				'flicker': 'flicker 4s ease-in-out infinite',
+				'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
+				'blockchain-pulse': 'blockchain-pulse 2s ease-in-out infinite',
 			}
 		}
 	},
